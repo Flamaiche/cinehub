@@ -60,5 +60,44 @@ class FilmSeeder extends Seeder
             'duree' => 142,
             'note' => 5.0,
         ]);
+        Film::create([
+            'titre' => 'Maverick',
+            'date_sortie' => '2022-05-25',
+            'synopsis' => 'Un pilote de chasse vétéran doit effectuer une mission difficile tout en affrontant son passé.',
+            'duree' => 131,
+            'note' => 4.3,
+        ]);
+
+        Film::create([
+            'titre' => 'Django',
+            'date_sortie' => '2012-12-25',
+            'synopsis' => 'Un esclave libéré part sauver sa femme des griffes d’un propriétaire terrien cruel.',
+            'duree' => 165,
+            'note' => 4.7,
+        ]);
+
+        Film::create([
+            'titre' => 'The Mauritanian',
+            'date_sortie' => '2021-02-12',
+            'synopsis' => 'L’histoire vraie d’un homme emprisonné à Guantanamo qui lutte pour prouver son innocence.',
+            'duree' => 129,
+            'note' => 4.2,
+        ]);
+
+        Film::create([
+            'titre' => 'Le Roi (Timoté)',
+            'date_sortie' => '2023-03-15',
+            'synopsis' => 'Un jeune roi doit apprendre à gouverner et à prendre des décisions pour sauver son royaume.',
+            'duree' => 142,
+            'note' => 4.0,
+        ]);
+
+        Film::create([
+            'titre' => 'Unspectable',
+            'date_sortie' => '2020-11-10',
+            'synopsis' => 'Un ancien voleur tente de mener une vie tranquille mais son passé le rattrape.',
+            'duree' => 118,
+            'note' => 3.9,
+        ]);
     }
 }
