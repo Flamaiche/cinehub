@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-bold mb-6 text-center">🎬 Liste des Films</h1>
+        <h1 class="text-3xl font-bold mb-6 text-center">Liste des Films</h1>
 
         <!-- Formulaire de recherche -->
         <form action="{{ route('films.index') }}" method="GET" class="mb-6 flex justify-center">
