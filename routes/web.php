@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Route;
 //    return view('layouts.app');
 //});
 
-Route::view('/', 'home');
+Route::view('/', 'home')->name('home');
 
-Route::view('/contact', 'contact');
+Route::view('/contact', 'contact')->name('contact');
 
-Route::view('/presentation', 'presentation');
+Route::view('/presentation', 'presentation')->name('presentation');
 
 Route::get('/films', [FilmController::class, 'index'])->name('films.index');
