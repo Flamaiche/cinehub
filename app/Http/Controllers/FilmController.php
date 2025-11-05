@@ -29,4 +29,9 @@ class FilmController extends Controller
 
         return view('films.index', compact('films', 'search'));
     }
+
+    public function create()
+    {
+        return view('films.create');
+    }
 }
