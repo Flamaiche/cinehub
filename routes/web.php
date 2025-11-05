@@ -13,6 +13,4 @@ Route::view('/contact', 'contact')->name('contact');
 
 Route::view('/presentation', 'presentation')->name('presentation');
 
-Route::get('/films', [FilmController::class, 'index'])->name('films.index');
-
 Route::resource('films', FilmController::class);
