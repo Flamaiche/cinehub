@@ -29,4 +29,31 @@ class FilmController extends Controller
 
         return view('films.index', compact('films', 'search'));
     }
+
+    public function edit($id){
+        $film = Film::findOrFail($id);
+        return view('films.edit', compact('film'));
+    }
+
+
+    public function update(Request $request, $id){
+        // Validation des données
+        $request->validate([
+            'titre' => 'required|string|max:255',
+            'date_sortie' => 'required|date',
+            'synopsis' => 'nullable|string',
+            'duree' => 'required|integer|min:1',
+            'note' => 'nullable|numeric|min:0|max:5',
+        ]);
+        $film = Film::findOrFail($id);
+        $film->title = $request->input('title');
+        $film->date_sortie = $request->input('date_sortie');
+        $film->synopsis = $request->input('synopsis');
+        $film->duree = $request->input('duree');
+        $film->note = $request->input('note');
+        $film->save();
+        // Redirection avec un message de succès
+        return redirect()->route('films.index')->with('success', 'Film mis à jour avec succès.');
+    }
+
 }
