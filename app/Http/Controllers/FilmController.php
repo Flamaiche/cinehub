@@ -34,4 +34,20 @@ class FilmController extends Controller
     {
         return view('films.create');
     }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'titre' => 'required|string|max:255',
+            'date_sortie' => 'nullable|date',
+            'synopsis' => 'nullable|string',
+            'duree' => 'required|integer|min:1',
+            'note' => 'nullable|numeric|min:0|max:5',
+        ]);
+
+        Film::create($validatedData);
+
+        return redirect()->route('films.index')->with('success', 'Le film a bien été ajouté.');
+    }
+
 }
