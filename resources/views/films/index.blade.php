@@ -4,7 +4,6 @@
     <div class="container mx-auto p-6">
         <h1 class="text-3xl font-bold mb-6 text-center">Liste des Films</h1>
 
-        <!-- Formulaire de recherche -->
         <form action="{{ route('films.index') }}" method="GET" class="mb-6 flex justify-center">
             <input
                 type="text"
@@ -18,56 +17,29 @@
             </button>
         </form>
 
-
-
-        <!-- Liste des films -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($films as $film)
-                <x-film-card :film="$film" />
-
-                @extends('layouts.app')
-
-                @section('content')
-                    <div class="container mx-auto p-6">
-                        <h1 class="text-3xl font-bold mb-6 text-center">Liste des Films</h1>
-
-                        <!-- Formulaire de recherche -->
-                        <form action="{{ route('films.index') }}" method="GET" class="mb-6 flex justify-center">
-                            <input
-                                type="text"
-                                name="search"
-                                value="{{ $search ?? '' }}"
-                                placeholder="Rechercher un film..."
-                                class="border border-gray-300 rounded-l px-4 py-2 w-1/3"
-                            />
-                            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-r hover:bg-indigo-700">
-                                Rechercher
-                            </button>
-                        </form>
+                <div class="border rounded-lg shadow p-4">
+                    <x-film-card :film="$film" />
+                    <div class="mt-4 text-center flex justify-center gap-2">
+                        <!-- Bouton Modifier -->
+                        <a href="{{ route('films.edit', $film->id) }}"
+                           class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 flex items-center gap-1">
+                            ✏️ Modifier
+                        </a>
 
                         <form action="{{ route('films.destroy', $film->id) }}" method="POST"
-                              onsubmit="return confirm('⚠️ Voulez-vous vraiment supprimer ce film ?');"
-                              class="inline-block">
+                              onsubmit="return confirm('⚠️ Voulez-vous vraiment supprimer ce film ?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit"
-                                    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center gap-2">
+                                    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center gap-1">
                                 🗑️ Supprimer
                             </button>
                         </form>
-
-
-                        <!-- Liste des films -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            @forelse($films as $film)
-                                <x-film-card :film="$film" />
-                            @empty
-                                <p class="text-center text-gray-500 col-span-full">Aucun film trouvé.</p>
-                            @endforelse
-                        </div>
                     </div>
-                @endsection
 
+                </div>
             @empty
                 <p class="text-center text-gray-500 col-span-full">Aucun film trouvé.</p>
             @endforelse
