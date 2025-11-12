@@ -58,4 +58,8 @@ class FilmController extends Controller
         return redirect()->route('films.index')->with('success', 'Film mis à jour avec succès.');
     }
 
+    public function show($id){
+        $film = Film::findOrFail($id);
+        return view('films.show', compact('film'));
+    }
 }
