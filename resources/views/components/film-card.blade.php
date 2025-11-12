@@ -1,4 +1,8 @@
 <div class="bg-white shadow-lg rounded-2xl p-4 hover:shadow-xl transition">
+    @if($film->media)
+        <img src="{{ $film->media }}" alt="Affiche de {{ $film->titre }}" class="w-full h-64 object-cover rounded-xl mb-4">
+    @endif
+
     <h2 class="text-xl font-semibold mb-2">{{ $film->titre }}</h2>
     <p class="text-sm text-gray-500 mb-1">Sortie : {{ $film->date_sortie }}</p>
     <p class="text-sm mb-3">Durée : {{ $film->duree }} min</p>
