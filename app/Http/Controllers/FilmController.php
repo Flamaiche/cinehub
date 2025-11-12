@@ -29,4 +29,11 @@ class FilmController extends Controller
 
         return view('films.index', compact('films', 'search'));
     }
+
+    public function destroy($id){
+        $film = Film::findOrFail($id);
+        $film->delete();
+        return redirect()->route('films.index')->with('success', 'Film supprimé avec succès.');
+    }
+
 }
