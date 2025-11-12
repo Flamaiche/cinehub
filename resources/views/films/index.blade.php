@@ -17,6 +17,11 @@
             </button>
         </form>
 
+        <div class="text-center mb-6 flex justify-center">
+            <a href="{{ route('films.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded">Ajouter un film</a>
+        </div>
+
+        <!-- Liste des films -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($films as $film)
                 <div>
