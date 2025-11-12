@@ -14,7 +14,10 @@
             </div>
         @endif
 
-        <form action="{{ route('films.update', $film->id) }}" method="POST" class="space-y-3">
+        <form action="{{ route('films.update', $film->id) }}"
+              method="POST"
+              onsubmit="return confirm('Êtes-vous sûr de vouloir modifier ce film ?');"
+              class="space-y-3">
             @csrf
             @method('PUT')
 
