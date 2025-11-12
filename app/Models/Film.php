@@ -19,7 +19,8 @@ class Film extends Model
         'date_sortie',
         'synopsis',
         'duree',
-        'note'
+        'note',
+        'media'
     ];
 
 }
