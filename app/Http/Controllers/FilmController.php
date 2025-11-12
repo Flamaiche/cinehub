@@ -37,22 +37,24 @@ class FilmController extends Controller
 
 
     public function update(Request $request, $id){
-        // Validation des données
+
         $request->validate([
             'titre' => 'required|string|max:255',
             'date_sortie' => 'required|date',
             'synopsis' => 'nullable|string',
             'duree' => 'required|integer|min:1',
             'note' => 'nullable|numeric|min:0|max:5',
+            'media' => 'nullable|url',
         ]);
         $film = Film::findOrFail($id);
-        $film->title = $request->input('title');
+        $film->titre = $request->input('titre');
         $film->date_sortie = $request->input('date_sortie');
         $film->synopsis = $request->input('synopsis');
         $film->duree = $request->input('duree');
         $film->note = $request->input('note');
+        $film->media = $request->input('media');
         $film->save();
-        // Redirection avec un message de succès
+
         return redirect()->route('films.index')->with('success', 'Film mis à jour avec succès.');
     }
 
