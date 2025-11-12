@@ -23,7 +23,7 @@
                     <a href="{{ route('films.show', $film->id) }}">
                         <div class="border rounded-lg shadow p-4">
                             <x-film-card :film="$film" />
-                            <div class="mt-4 text-center">
+                            <div class="mt-4 text-center flex justify-center gap-4">
                                 <a href="{{ route('films.edit', $film->id) }}"
                                    class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
                                     ✏️ Modifier
@@ -34,7 +34,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center gap-1">
+                                            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 ">
                                         🗑️ Supprimer
                                     </button>
                                 </form>

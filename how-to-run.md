@@ -3,5 +3,5 @@ php artisan migrate:fresh
 php artisan migrate --seed
 
 php artisan serve
-npm run dev // tailwindcss
+npm run dev
 ```
