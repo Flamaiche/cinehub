@@ -4,6 +4,19 @@
     <div class="container mx-auto p-6">
         <h1 class="text-3xl font-bold mb-6 text-center">Liste des Films</h1>
 
+        <!-- Alert succès / erreur -->
+        @if(session()->has('success'))
+            @if(session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                    {{ session('message') }}
+                </div>
+            @else
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    {{ session('message') }}
+                </div>
+            @endif
+        @endif
+
         <form action="{{ route('films.index') }}" method="GET" class="mb-6 flex justify-center">
             <input
                 type="text"
