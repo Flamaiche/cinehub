@@ -15,7 +15,7 @@
             </div>
             <div class="mt-4 text-center flex justify-center gap-4">
                 <a href="{{ route('films.edit', $film->id) }}"
-                   class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                   class="bg-yellow-500 shadow-lg text-white px-4 py-2 rounded hover:bg-yellow-600 hover:shadow-xl transition">
                     ✏️ Modifier
                 </a>
 
@@ -24,7 +24,7 @@
                     @csrf
                     @method('DELETE')
                     <button type="submit"
-                            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 ">
+                            class="bg-red-600 shadow-lg text-white px-4 py-2 rounded hover:bg-red-700 hover:shadow-xl transition">
                         🗑️ Supprimer
                     </button>
                 </form>
