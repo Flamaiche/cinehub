@@ -24,29 +24,7 @@
         <!-- Liste des films -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($films as $film)
-                <div>
-                    <a href="{{ route('films.show', $film->id) }}">
-                        <div class="border rounded-lg shadow p-4">
-                            <x-film-card :film="$film" />
-                            <div class="mt-4 text-center flex justify-center gap-4">
-                                <a href="{{ route('films.edit', $film->id) }}"
-                                   class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
-                                    ✏️ Modifier
-                                </a>
-
-                                <form action="{{ route('films.destroy', $film->id) }}" method="POST"
-                                    onsubmit="return confirm('⚠️ Voulez-vous vraiment supprimer ce film ?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 ">
-                                        🗑️ Supprimer
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                <x-film-card :film="$film" />
             @empty
                 <p class="text-center text-gray-500 col-span-full">Aucun film trouvé.</p>
             @endforelse
