@@ -68,7 +68,7 @@ class FilmSeeder extends Seeder
             'media' =>'https://m.media-amazon.com/images/I/51r1lzFTpFL._AC_UF894,1000_QL80_.jpg',
         ]);
         Film::create([
-            'titre' => '>Top gun -Maverick',
+            'titre' => 'Top gun -Maverick',
             'date_sortie' => '2022-05-25',
             'synopsis' => 'Un pilote de chasse vétéran doit effectuer une mission difficile tout en affrontant son passé.',
             'duree' => 131,

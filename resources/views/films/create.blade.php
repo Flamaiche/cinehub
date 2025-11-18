@@ -55,6 +55,13 @@
                        min="0" max="5" step="0.1" placeholder="Ex : 4.5">
             </div>
 
+            <div>
+                <label for="media" class="block text-sm font-semibold text-gray-700">URL de l'affiche</label>
+                <input type="media" name="media" id="media" value="{{ old('media') }}"
+                       class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1"
+                       min="0" max="5" step="0.1" placeholder="Ex : https://url-affiche-film.png">
+            </div>
+
             <div class="flex justify-between items-center mt-8">
                 <a href="{{ route('films.index') }}"
                    class="text-gray-600 hover:text-gray-800 transition">⟵ Retour à la liste</a>
