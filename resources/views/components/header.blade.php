@@ -15,12 +15,16 @@
             @endguest
 
             @auth
-                <!-- Liens pour les utilisateurs connectés -->
                 <div class="flex gap-4 items-center">
-                    <span class="text-sm">{{ Auth::user()->name }}</span>
+                    <a href="{{ route('profil.show') }}"
+                       class="text-sm hover:underline">
+                        {{ Auth::user()->prenom }} {{ Auth::user()->nom }}
+                    </a>
+
                     <form method="POST" action="/logout" class="inline">
                         @csrf
-                        <button type="submit" class="hover:underline bg-transparent border-0 cursor-pointer text-white">
+                        <button type="submit"
+                                class="hover:underline bg-transparent border-0 cursor-pointer text-white">
                             Déconnexion
                         </button>
                     </form>
