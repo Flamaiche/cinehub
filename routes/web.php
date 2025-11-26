@@ -3,6 +3,8 @@
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 
 //Route::get('/', function () {
 //    return view('layouts.app');
@@ -37,4 +39,21 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profil/password', [ProfilController::class, 'updatePassword'])->name('profil.password.update');
     Route::delete('/profil', [ProfilController::class, 'destroy'])->name('profil.destroy');
 });
+
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+    ->middleware(['guest'])
+    ->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->middleware(['guest'])
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->middleware(['guest'])
+    ->name('password.reset');
+
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->middleware(['guest'])
+    ->name('password.store');
+
 
