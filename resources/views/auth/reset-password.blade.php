@@ -4,7 +4,8 @@
     <div class="container mx-auto max-w-md p-6">
         <h1 class="text-2xl font-bold mb-4 text-center">Modifier le mot de passe</h1>
 
-        <form method="POST" action="{{ route('password.update') }}">
+        <form method="POST" action="{{ route('password.store') }}">
+
         @csrf
 
             <input type="hidden" name="token" value="{{ $request->route('token') }}">
