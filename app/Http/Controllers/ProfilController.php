@@ -33,7 +33,6 @@ class ProfilController extends Controller
         ]);
 
         // name = nom + prenom comme demandé dans le sujet
-        $user->name   = $data['nom'] . ' ' . $data['prenom'];
         $user->nom    = $data['nom'];
         $user->prenom = $data['prenom'];
         $user->email  = $data['email'];
