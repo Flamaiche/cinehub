@@ -9,13 +9,11 @@
 <body class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center p-4">
 <div class="w-full max-w-md">
     <div class="bg-white rounded-2xl shadow-2xl p-8">
-        <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">Inscription</h1>
             <p class="text-gray-600">Créez votre compte CinéHub</p>
         </div>
 
-        <!-- Erreurs de validation -->
         @if ($errors->any())
             <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                 <ul class="space-y-1">
@@ -31,26 +29,44 @@
             </div>
         @endif
 
-        <!-- Formulaire d'inscription -->
         <form method="POST" action="/register" class="space-y-5">
             @csrf
 
             <!-- Nom -->
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-                    Nom complet
+                <label for="nom" class="block text-sm font-medium text-gray-700 mb-2">
+                    Nom
                 </label>
                 <input
                     type="text"
-                    name="name"
-                    id="name"
-                    value="{{ old('name') }}"
+                    name="nom"
+                    id="nom"
+                    value="{{ old('nom') }}"
                     required
                     autofocus
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 @error('name') border-red-500 @enderror"
-                    placeholder="Jean Dupont"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 @error('nom') border-red-500 @enderror"
+                    placeholder="Dupont"
                 >
-                @error('name')
+                @error('nom')
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Prénom -->
+            <div>
+                <label for="prenom" class="block text-sm font-medium text-gray-700 mb-2">
+                    Prénom
+                </label>
+                <input
+                    type="text"
+                    name="prenom"
+                    id="prenom"
+                    value="{{ old('prenom') }}"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 @error('prenom') border-red-500 @enderror"
+                    placeholder="Jean"
+                >
+                @error('prenom')
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
@@ -107,7 +123,6 @@
                 >
             </div>
 
-            <!-- Bouton d'inscription -->
             <button
                 type="submit"
                 class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition duration-200 transform hover:scale-[1.02] shadow-lg mt-6"
@@ -116,7 +131,6 @@
             </button>
         </form>
 
-        <!-- Lien vers connexion -->
         <div class="mt-6 text-center">
             <p class="text-gray-600">
                 Déjà un compte ?
