@@ -71,6 +71,13 @@
                 @error('password')
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
+
+                <!-- Bouton mot de passe oublié -->
+                <div class="mt-2 text-right">
+                    <a href="{{ route('password.request') }}" class="text-sm text-indigo-600 hover:text-indigo-800 font-semibold">
+                        Mot de passe oublié ?
+                    </a>
+                </div>
             </div>
 
             <!-- Se souvenir de moi -->
