@@ -16,7 +16,7 @@
 
         <form action="{{ route('films.update', $film->id) }}"
               method="POST"
-              onsubmit="return confirm('Êtes-vous sûr de vouloir modifier ce film ?');"
+              onsubmit="return confirm('Êtes-vous sûr de vouloir modifier ce film {{$film->titre}} ?');"
               class="space-y-3">
             @csrf
             @method('PUT')

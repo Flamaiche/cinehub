@@ -48,9 +48,10 @@ class FilmController extends Controller
             ]);
 
             Film::create($validatedData);
+            $titre = $request->input('titre');
 
             $success = true;
-            $message = "Le film a bien été ajouté !";
+            $message = "Le film " . $titre . " a bien été ajouté !";
         } catch (\Exception $e) {
             $success = false;
             $message = "Erreur : le film n'a pas pu être ajouté.";
@@ -91,10 +92,10 @@ class FilmController extends Controller
             $film->save();
 
             $success = true;
-            $message = "Film mis à jour avec succès !";
+            $message = "Film " . $film->titre . " mis à jour avec succès !";
         } catch (\Exception $e) {
             $success = false;
-            $message = "Erreur : la modification n'a pas pu être réalisée.";
+            $message = "Erreur : la modification du film " . $film->titre . " n'a pas pu être réalisée.";
         }
 
         return redirect()->route('films.index')->with([
@@ -111,10 +112,10 @@ class FilmController extends Controller
             $film->delete();
 
             $success = true;
-            $message = "Film supprimé avec succès !";
+            $message = "Film " . $film->titre . " supprimé avec succès !";
         } catch (\Exception $e) {
             $success = false;
-            $message = "Erreur : le film n'a pas pu être supprimé.";
+            $message = "Erreur : le film " . $film->titre . " n'a pas pu être supprimé.";
         }
 
         return redirect()->route('films.index')->with([
