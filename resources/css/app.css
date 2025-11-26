@@ -1,6 +1,4 @@
 @import 'tailwindcss';
-@import 'alpinejs/dist/cdn.min.js';
-@import '@fortawesome/fontawesome-free/js/all.js';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
