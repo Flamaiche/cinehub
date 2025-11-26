@@ -15,9 +15,8 @@
             @endguest
 
             @auth
-                <!-- Liens pour les utilisateurs connectés -->
                 <div class="flex gap-4 items-center">
-                    <span class="text-sm">{{ Auth::user()->name }}</span>
+                    <span class="text-sm">{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</span>
                     <form method="POST" action="/logout" class="inline">
                         @csrf
                         <button type="submit" class="hover:underline bg-transparent border-0 cursor-pointer text-white">
