@@ -20,7 +20,7 @@
                 </a>
 
                 <form action="{{ route('films.destroy', $film->id) }}" method="POST"
-                      onsubmit="return confirm('⚠️ Voulez-vous vraiment supprimer ce film ?');">
+                      onsubmit="return confirm('⚠️ Voulez-vous vraiment supprimer ce film {{$film->titre}} ?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit"
