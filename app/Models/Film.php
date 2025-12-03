@@ -28,4 +28,9 @@ class Film extends Model
         return $this->hasMany(Commentaire::class);
     }
 
+    public function medias()
+    {
+        return $this->hasMany(Media::class);
+    }
+
 }

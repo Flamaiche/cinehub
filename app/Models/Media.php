@@ -15,4 +15,9 @@ class Media extends Model
         'url',
         'description'
     ];
+
+    public function films()
+    {
+        return $this->belongsToMany(Film::class);
+    }
 }

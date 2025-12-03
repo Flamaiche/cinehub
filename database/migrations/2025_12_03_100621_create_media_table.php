@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('type')->comment('image, video');
             $table->string('url');
             $table->string('description');
+            $table->foreignId('film_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
