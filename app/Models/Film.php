@@ -20,7 +20,6 @@ class Film extends Model
         'synopsis',
         'duree',
         'note',
-        'media'
     ];
 
     public function commentaires()
