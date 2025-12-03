@@ -23,4 +23,9 @@ class Film extends Model
         'media'
     ];
 
+    public function commentaires()
+    {
+        return $this->hasMany(Commentaire::class);
+    }
+
 }

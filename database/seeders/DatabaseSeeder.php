@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+         User::factory(10)->create();
 
         User::factory()->create([
             'nom' => 'Test User Nom',
@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(FilmSeeder::class);
+        $this->call(CommentaireSeeder::class);
     }
 }
