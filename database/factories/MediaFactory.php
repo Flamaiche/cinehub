@@ -18,7 +18,7 @@ class MediaFactory extends Factory
     {
         return [
             'type' => $this->faker->randomElement(['image', 'video']),
-            'url' => $this->faker->randomElement(['https://portfolio.malik-dev.com', $this->faker->imageUrl()]),
+            'url' => 'https://picsum.photos/640/480?random=' . $this->faker->unique()->numberBetween(1, 10000),
             'description' => $this->faker->paragraph(),
             'film_id' => $this->faker->randomNumber(1, 10),
         ];
