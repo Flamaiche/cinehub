@@ -22,6 +22,7 @@ class User extends Authenticatable
         'nom',
         'prenom',
         'email',
+        'role',
         'password',
     ];
 
@@ -48,8 +49,16 @@ class User extends Authenticatable
         ];
     }
 
+    // OneToMany
+    public function commentaires()
+    {
+        return $this->hasMany(Commentaire::class);
+    }
+
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new CustomResetPasswordNotification($token));
     }
+
+
 }
