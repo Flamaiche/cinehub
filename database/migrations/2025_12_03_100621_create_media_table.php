@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('type')->comment('image, video');
             $table->string('url');
+            $table->string('description');
         });
     }
 
