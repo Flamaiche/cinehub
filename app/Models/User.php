@@ -22,6 +22,7 @@ class User extends Authenticatable
         'nom',
         'prenom',
         'email',
+        'role',
         'password',
     ];
 
@@ -52,4 +53,6 @@ class User extends Authenticatable
     {
         $this->notify(new CustomResetPasswordNotification($token));
     }
+
+
 }
