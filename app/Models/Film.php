@@ -32,4 +32,15 @@ class Film extends Model
         return $this->hasMany(Media::class);
     }
 
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class, 'film_genre');
+    }
+
+    public function acteurs()
+    {
+        return $this->belongsToMany(Acteur::class, 'participe')
+            ->using(Participe::class)
+            ->withPivot(['role', 'note']);
+    }
 }
