@@ -38,7 +38,19 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profil', [ProfilController::class, 'update'])->name('profil.update');
     Route::patch('/profil/password', [ProfilController::class, 'updatePassword'])->name('profil.password.update');
     Route::delete('/profil', [ProfilController::class, 'destroy'])->name('profil.destroy');
+
+    // ↓↓↓ AJOUTS MINIMAUX POUR LES ACTEURS ↓↓↓
+    Route::post('/films/{film}/acteurs', [FilmController::class, 'attachActor'])
+        ->name('films.attachActor');
+
+    Route::put('/films/{film}/acteurs/{acteur}', [FilmController::class, 'updateActor'])
+        ->name('films.updateActor');
+
+    Route::delete('/films/{film}/acteurs/{acteur}', [FilmController::class, 'detachActor'])
+        ->name('films.detachActor');
+    // ↑↑↑ FIN DES AJOUTS ↑↑↑
 });
+
 
 Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
     ->middleware(['guest'])
