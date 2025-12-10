@@ -21,6 +21,40 @@
                 </p>
             @endif
 
+            {{-- Médias --}}
+            <h2 class="font-semibold mt-4 mb-2">Médias</h2>
+            @if($film->medias->isEmpty())
+                <p class="text-sm text-gray-500">Aucun média pour ce film.</p>
+            @else
+                @foreach($film->medias as $media)
+                    @php
+                        $isExternal = str_starts_with($media->url, 'http');
+                        $src = $isExternal
+                            ? $media->url
+                            : \Illuminate\Support\Facades\Storage::disk('public')->url($media->url);
+                    @endphp
+
+                    <div class="mb-3">
+                        <img src="{{ $src }}"
+                             alt="{{ $media->description ?? 'Média du film' }}"
+                             class="w-full h-auto object-contain rounded-xl mb-1">
+
+                        @auth
+                            <form action="{{ route('medias.delete', $media->id) }}"
+                                  method="POST"
+                                  onsubmit="return confirm('Supprimer ce média ?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="text-xs text-red-600 hover:underline">
+                                    Supprimer ce média
+                                </button>
+                            </form>
+                        @endauth
+                    </div>
+                @endforeach
+            @endif
+
             {{-- Acteurs avec rôle + note --}}
             <h2 class="font-semibold mt-4 mb-2">Acteurs</h2>
             @if($film->acteurs->isEmpty())

@@ -123,5 +123,61 @@
             </form>
         </div>
     </div>
+    {{-- Gestion des médias du film --}}
+    <div class="mt-8">
+        <h2 class="text-xl font-semibold mb-3">Médias</h2>
+
+        {{-- Médias existants (aperçu rapide) --}}
+        @forelse($film->medias as $media)
+            <div class="mb-2">
+                <img src="{{ $media->url }}" alt="{{ $media->description }}">
+                    <span class="text-sm">
+                        {{ $media->description ?: $media->url }}
+                    </span>
+
+                <form action="{{ route('medias.delete', $media->id) }}"
+                      method="POST"
+                      class="inline-block ml-2"
+                      onsubmit="return confirm('Supprimer ce média ?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                            class="text-xs text-red-600 hover:underline">
+                        Supprimer
+                    </button>
+                </form>
+            </div>
+        @empty
+            <p class="text-sm text-gray-500 mb-2">Aucun média pour ce film.</p>
+        @endforelse
+
+        {{-- Ajouter un média (fichier OU URL externe) --}}
+        <form action="{{ route('medias.upload') }}"
+              method="POST"
+              enctype="multipart/form-data"
+              class="mt-4 space-y-2">
+            @csrf
+
+            <input type="hidden" name="film_id" value="{{ $film->id }}">
+
+            <label class="block text-sm font-semibold">Fichier (optionnel)</label>
+            <input type="file" name="file" class="w-full border rounded px-2 py-1">
+
+            <p class="text-xs text-gray-500">
+                Ou bien une URL externe (YouTube, image, etc.)
+            </p>
+            <input type="url" name="url" placeholder="https://..."
+                   class="w-full border rounded px-2 py-1">
+
+            <input type="text" name="description" placeholder="Description"
+                   class="w-full border rounded px-2 py-1">
+
+            <button type="submit"
+                    class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
+                Ajouter un média
+            </button>
+        </form>
+    </div>
+
 @endsection
 
