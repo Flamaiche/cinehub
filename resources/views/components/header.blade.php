@@ -21,6 +21,14 @@
                         {{ Auth::user()->prenom }} {{ Auth::user()->nom }} <span class="uppercase"> {{ Auth::user()->role }} </span>
                     </a>
 
+                    <!-- Bouton Ajouter un film si l'utilisateur a la permission -->
+                    @can('create', App\Models\Film::class)
+                        <a href="{{ route('films.create') }}"
+                           class="bg-indigo-800 hover:bg-indigo-900 text-white px-3 py-1 rounded">
+                            ➕ Ajouter un film
+                        </a>
+                    @endcan
+
                     <form method="POST" action="/logout" class="inline">
                         @csrf
                         <button type="submit"

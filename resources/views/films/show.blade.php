@@ -20,6 +20,7 @@
                     @endforeach
                 </p>
             @endif
+
             {{-- Médias --}}
             <h2 class="text-xl font-bold mt-6 mb-3">Médias</h2>
             @if($film->medias->isEmpty())
@@ -43,7 +44,8 @@
                                 <p class="text-sm text-gray-700 mb-2">{{ $media->description }}</p>
                             @endif
 
-                            @auth
+                            {{-- Suppression des médias uniquement si autorisé à modifier le film --}}
+                            @can('update', $film)
                                 <form action="{{ route('medias.delete', $media->id) }}"
                                       method="POST"
                                       onsubmit="return confirm('Supprimer ce média ?');">
@@ -54,12 +56,11 @@
                                         🗑️ Supprimer
                                     </button>
                                 </form>
-                            @endauth
+                            @endcan
                         </div>
                     @endforeach
                 </div>
             @endif
-
 
             {{-- Acteurs avec rôle + note --}}
             <h2 class="font-semibold mt-4 mb-2">Acteurs</h2>
@@ -78,6 +79,30 @@
                     @endforeach
                 </ul>
             @endif
+
+            {{-- Boutons Modifier / Supprimer si autorisé --}}
+            @canany(['update', 'delete'], $film)
+                <div class="flex justify-center gap-4 mt-4">
+                    @can('update', $film)
+                        <a href="{{ route('films.edit', $film->id) }}"
+                           class="bg-yellow-500 shadow-lg text-white px-4 py-2 rounded hover:bg-yellow-600 hover:shadow-xl transition">
+                            ✏️ Modifier
+                        </a>
+                    @endcan
+
+                    @can('delete', $film)
+                        <form action="{{ route('films.destroy', $film->id) }}" method="POST"
+                              onsubmit="return confirm('⚠️ Voulez-vous vraiment supprimer ce film {{$film->titre}} ?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="bg-red-600 shadow-lg text-white px-4 py-2 rounded hover:bg-red-700 hover:shadow-xl transition">
+                                🗑️ Supprimer
+                            </button>
+                        </form>
+                    @endcan
+                </div>
+            @endcanany
 
             <div class="flex justify-center mt-6">
                 <a href="{{ route('films.index') }}"
