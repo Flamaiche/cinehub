@@ -49,6 +49,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/films/{film}/acteurs/{acteur}', [FilmController::class, 'detachActor'])
         ->name('films.detachActor');
     // ↑↑↑ FIN DES AJOUTS ↑↑↑
+
+    Route::post('/medias/upload', [MediaController::class, 'upload'])->name('medias.upload');
+    Route::delete('/medias/{id}', [MediaController::class, 'delete'])->name('medias.delete');
 });
 
 
