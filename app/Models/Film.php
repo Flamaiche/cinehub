@@ -20,7 +20,6 @@ class Film extends Model
         'synopsis',
         'duree',
         'note',
-        'media'
     ];
 
     public function commentaires()
@@ -28,4 +27,20 @@ class Film extends Model
         return $this->hasMany(Commentaire::class);
     }
 
+    public function medias()
+    {
+        return $this->hasMany(Media::class);
+    }
+
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class, 'film_genre');
+    }
+
+    public function acteurs()
+    {
+        return $this->belongsToMany(Acteur::class, 'participe')
+            ->using(Participe::class)
+            ->withPivot(['role', 'note']);
+    }
 }

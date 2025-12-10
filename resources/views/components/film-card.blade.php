@@ -3,8 +3,11 @@
     <a href="{{ route('films.show', $film->id) }}">
         <div class="border rounded-lg shadow p-4">
             <div class="bg-white shadow-lg rounded-2xl p-4 hover:shadow-xl transition">
-                @if($film->media)
-                    <img src="{{ $film->media }}" alt="Affiche de {{ $film->titre }}" class="w-full h-auto object-contain rounded-xl mb-4">
+                @php
+                    $media = $film->medias()->first();
+                @endphp
+                @if($media)
+                    <img src="{{ $media->url }}" alt="Affiche de {{ $film->titre }}" class="w-full h-auto object-contain rounded-xl mb-4">
                 @endif
 
                 <h2 class="text-xl font-semibold mb-2">{{ $film->titre }}</h2>

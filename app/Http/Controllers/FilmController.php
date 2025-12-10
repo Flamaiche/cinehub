@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Acteur;
 use App\Models\Film;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
@@ -31,102 +33,140 @@ class FilmController extends Controller
 
     public function create()
     {
-        return view('films.create');
+        $genres = Genre::all();
+
+        return view('films.create', compact('genres'));
     }
 
     public function store(Request $request)
     {
         $success = false;
+
         try {
             $validatedData = $request->validate([
-                'titre' => 'required|string|max:255',
+                'titre'       => 'required|string|max:255',
                 'date_sortie' => 'nullable|date',
-                'synopsis' => 'nullable|string',
-                'duree' => 'required|integer|min:1',
-                'note' => 'nullable|numeric|min:0|max:5',
-                'media' => 'nullable|url',
+                'synopsis'    => 'nullable|string',
+                'duree'       => 'required|integer|min:1',
+                'note'        => 'nullable|numeric|min:0|max:5',
+                'genres'      => ['array'],
+                'genres.*'    => ['exists:genres,id'],
             ]);
 
-            Film::create($validatedData);
-            $titre = $request->input('titre');
+            $film = Film::create($validatedData);
+
+            $film->genres()->sync($request->input('genres', []));
 
             $success = true;
-            $message = "Le film " . $titre . " a bien été ajouté !";
+            $message = 'Le film ' . $film->titre . ' a bien été ajouté !';
         } catch (\Exception $e) {
             $success = false;
             $message = "Erreur : le film n'a pas pu être ajouté.";
         }
 
-        return redirect()->route('films.index')->with([
-            'success' => $success,
-            'message' => $message
-        ]);
+        return redirect()->route('films.index')->with(compact('success', 'message'));
     }
 
     public function edit($id)
     {
-        $film = Film::findOrFail($id);
-        return view('films.edit', compact('film'));
+        $film   = Film::findOrFail($id);
+        $genres = Genre::all();
+        $acteurs = Acteur::all();
+
+        return view('films.edit', compact('film', 'genres', 'acteurs'));
     }
 
     public function update(Request $request, $id)
     {
         $success = false;
+
         try {
-            $request->validate([
-                'titre' => 'required|string|max:255',
+            $validatedData = $request->validate([
+                'titre'       => 'required|string|max:255',
                 'date_sortie' => 'required|date',
-                'synopsis' => 'nullable|string',
-                'duree' => 'required|integer|min:1',
-                'note' => 'nullable|numeric|min:0|max:5',
-                'media' => 'nullable|url',
+                'synopsis'    => 'nullable|string',
+                'duree'       => 'required|integer|min:1',
+                'note'        => 'nullable|numeric|min:0|max:5',
+                'genres'      => ['array'],
+                'genres.*'    => ['exists:genres,id'],
             ]);
 
             $film = Film::findOrFail($id);
-            $film->titre = $request->input('titre');
-            $film->date_sortie = $request->input('date_sortie');
-            $film->synopsis = $request->input('synopsis');
-            $film->duree = $request->input('duree');
-            $film->note = $request->input('note');
-            $film->media = $request->input('media');
-            $film->save();
+            $film->update($validatedData);
+
+            $film->genres()->sync($request->input('genres', []));
 
             $success = true;
-            $message = "Film " . $film->titre . " mis à jour avec succès !";
+            $message = 'Film ' . $film->titre . ' mis à jour avec succès !';
         } catch (\Exception $e) {
             $success = false;
-            $message = "Erreur : la modification du film " . $film->titre . " n'a pas pu être réalisée.";
+            $message = "Erreur : la modification du film n'a pas pu être réalisée.";
         }
 
-        return redirect()->route('films.index')->with([
-            'success' => $success,
-            'message' => $message
-        ]);
+        return redirect()->route('films.index')->with(compact('success', 'message'));
     }
 
     public function destroy($id)
     {
         $success = false;
+
         try {
             $film = Film::findOrFail($id);
+            $titre = $film->titre;
             $film->delete();
 
             $success = true;
-            $message = "Film " . $film->titre . " supprimé avec succès !";
+            $message = 'Film ' . $titre . ' supprimé avec succès !';
         } catch (\Exception $e) {
             $success = false;
-            $message = "Erreur : le film " . $film->titre . " n'a pas pu être supprimé.";
+            $message = "Erreur : le film n'a pas pu être supprimé.";
         }
 
-        return redirect()->route('films.index')->with([
-            'success' => $success,
-            'message' => $message
-        ]);
+        return redirect()->route('films.index')->with(compact('success', 'message'));
     }
 
     public function show($id)
     {
-        $film = Film::findOrFail($id);
+        $film = Film::with(['genres', 'medias', 'acteurs'])->findOrFail($id);
+
         return view('films.show', compact('film'));
+    }
+
+    public function attachActor(Request $request, Film $film)
+    {
+        $data = $request->validate([
+            'acteur_id' => ['required', 'exists:acteurs,id'],
+            'role'      => ['required', 'string', 'max:255'],
+            'note'      => ['nullable', 'integer', 'min:0', 'max:10'],
+        ]);
+
+        $film->acteurs()->attach($data['acteur_id'], [
+            'role' => $data['role'],
+            'note' => $data['note'],
+        ]);
+
+        return back()->with('success', 'Acteur ajouté au film.');
+    }
+
+    public function updateActor(Request $request, Film $film, Acteur $acteur)
+    {
+        $data = $request->validate([
+            'role' => ['required', 'string', 'max:255'],
+            'note' => ['nullable', 'integer', 'min:0', 'max:10'],
+        ]);
+
+        $film->acteurs()->updateExistingPivot($acteur->id, [
+            'role' => $data['role'],
+            'note' => $data['note'],
+        ]);
+
+        return back()->with('success', 'Rôle et note mis à jour pour cet acteur.');
+    }
+
+    public function detachActor(Film $film, Acteur $acteur)
+    {
+        $film->acteurs()->detach($acteur->id);
+
+        return back()->with('success', 'Acteur retiré du film.');
     }
 }
