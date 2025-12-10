@@ -124,60 +124,76 @@
         </div>
     </div>
     {{-- Gestion des médias du film --}}
-    <div class="mt-8">
-        <h2 class="text-xl font-semibold mb-3">Médias</h2>
+    <div class="container mx-auto p-6 max-w-lg">
+        <h2 class="text-xl font-bold mb-4">📷 Médias du film</h2>
 
-        {{-- Médias existants (aperçu rapide) --}}
-        @forelse($film->medias as $media)
-            <div class="mb-2">
-                <img src="{{ $media->url }}" alt="{{ $media->description }}">
-                    <span class="text-sm">
-                        {{ $media->description ?: $media->url }}
+        {{-- Liste des médias existants --}}
+        <div class="mb-4">
+            <h3 class="font-semibold text-sm text-gray-700 mb-2">Médias actuels</h3>
+
+            @forelse($film->medias as $media)
+                <div class="flex justify-between flex-col items-center bg-white border rounded px-3 py-2 mb-2 shadow-sm">
+                    <img src="{{ $media->url }}" alt="{{ $media->description }}">
+                    <span class="text-sm truncate flex-1">
+                        {{ $media->description ?: Str::limit($media->url, 50) }}
                     </span>
 
-                <form action="{{ route('medias.delete', $media->id) }}"
-                      method="POST"
-                      class="inline-block ml-2"
-                      onsubmit="return confirm('Supprimer ce média ?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit"
-                            class="text-xs text-red-600 hover:underline">
-                        Supprimer
-                    </button>
-                </form>
-            </div>
-        @empty
-            <p class="text-sm text-gray-500 mb-2">Aucun média pour ce film.</p>
-        @endforelse
+                    <form action="{{ route('medias.delete', $media->id) }}"
+                          method="POST"
+                          class="ml-2"
+                          onsubmit="return confirm('Supprimer ce média ?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                                class="bg-red-600 text-white text-xs px-2 py-1 rounded hover:bg-red-700 transition">
+                            🗑️ Supprimer
+                        </button>
+                    </form>
+                </div>
+            @empty
+                <p class="text-sm text-gray-500 italic">Aucun média pour ce film.</p>
+            @endforelse
+        </div>
 
-        {{-- Ajouter un média (fichier OU URL externe) --}}
-        <form action="{{ route('medias.upload') }}"
-              method="POST"
-              enctype="multipart/form-data"
-              class="mt-4 space-y-2">
-            @csrf
+        {{-- Formulaire d'ajout --}}
+        <div class="bg-white border rounded-lg p-4 shadow-sm">
+            <h3 class="font-semibold text-sm text-gray-700 mb-3">Ajouter un nouveau média</h3>
 
-            <input type="hidden" name="film_id" value="{{ $film->id }}">
+            <form action="{{ route('medias.upload') }}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  class="space-y-3">
+                @csrf
 
-            <label class="block text-sm font-semibold">Fichier (optionnel)</label>
-            <input type="file" name="file" class="w-full border rounded px-2 py-1">
+                <input type="hidden" name="film_id" value="{{ $film->id }}">
 
-            <p class="text-xs text-gray-500">
-                Ou bien une URL externe (YouTube, image, etc.)
-            </p>
-            <input type="url" name="url" placeholder="https://..."
-                   class="w-full border rounded px-2 py-1">
+                <div>
+                    <label class="block text-sm font-semibold mb-1">📁 Fichier (optionnel)</label>
+                    <input type="file" name="file"
+                           class="w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
 
-            <input type="text" name="description" placeholder="Description"
-                   class="w-full border rounded px-2 py-1">
+                <div>
+                    <label class="block text-sm font-semibold mb-1">🔗 URL externe (optionnel)</label>
+                    <input type="url" name="url" placeholder="https://example.com/image.jpg"
+                           class="w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                    <p class="text-xs text-gray-500 mt-1">Pour YouTube, image hébergée ailleurs, etc.</p>
+                </div>
 
-            <button type="submit"
-                    class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
-                Ajouter un média
-            </button>
-        </form>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">📝 Description</label>
+                    <input type="text" name="description" placeholder="Affiche principale, bande-annonce..."
+                           class="w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700 shadow-lg transition">
+                    ➕ Ajouter le média
+                </button>
+            </form>
+        </div>
     </div>
+
 
 @endsection
 

@@ -20,40 +20,46 @@
                     @endforeach
                 </p>
             @endif
-
             {{-- Médias --}}
-            <h2 class="font-semibold mt-4 mb-2">Médias</h2>
+            <h2 class="text-xl font-bold mt-6 mb-3">Médias</h2>
             @if($film->medias->isEmpty())
-                <p class="text-sm text-gray-500">Aucun média pour ce film.</p>
+                <p class="text-sm text-gray-500 italic">Aucun média pour ce film.</p>
             @else
-                @foreach($film->medias as $media)
-                    @php
-                        $isExternal = str_starts_with($media->url, 'http');
-                        $src = $isExternal
-                            ? $media->url
-                            : \Illuminate\Support\Facades\Storage::disk('public')->url($media->url);
-                    @endphp
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @foreach($film->medias as $media)
+                        @php
+                            $isExternal = str_starts_with($media->url, 'http');
+                            $src = $isExternal
+                                ? $media->url
+                                : \Illuminate\Support\Facades\Storage::disk('public')->url($media->url);
+                        @endphp
 
-                    <div class="mb-3">
-                        <img src="{{ $src }}"
-                             alt="{{ $media->description ?? 'Média du film' }}"
-                             class="w-full h-auto object-contain rounded-xl mb-1">
+                        <div class="border rounded-lg shadow-md p-3 bg-gray-50">
+                            <img src="{{ $src }}"
+                                 alt="{{ $media->description ?? 'Média du film' }}"
+                                 class="w-full h-48 object-cover rounded-md mb-2">
 
-                        @auth
-                            <form action="{{ route('medias.delete', $media->id) }}"
-                                  method="POST"
-                                  onsubmit="return confirm('Supprimer ce média ?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                        class="text-xs text-red-600 hover:underline">
-                                    Supprimer ce média
-                                </button>
-                            </form>
-                        @endauth
-                    </div>
-                @endforeach
+                            @if($media->description)
+                                <p class="text-sm text-gray-700 mb-2">{{ $media->description }}</p>
+                            @endif
+
+                            @auth
+                                <form action="{{ route('medias.delete', $media->id) }}"
+                                      method="POST"
+                                      onsubmit="return confirm('Supprimer ce média ?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="bg-red-600 text-white text-xs px-3 py-1 rounded hover:bg-red-700 transition">
+                                        🗑️ Supprimer
+                                    </button>
+                                </form>
+                            @endauth
+                        </div>
+                    @endforeach
+                </div>
             @endif
+
 
             {{-- Acteurs avec rôle + note --}}
             <h2 class="font-semibold mt-4 mb-2">Acteurs</h2>
