@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Acteur;
 use App\Models\Film;
 use App\Models\Genre;
 use Illuminate\Http\Request;
@@ -69,8 +70,8 @@ class FilmController extends Controller
     public function edit($id)
     {
         $film   = Film::findOrFail($id);
-        $genres = $film->genres;
-        $acteurs = $film->acteurs;
+        $genres = Genre::all();
+        $acteurs = Acteur::all();
 
         return view('films.edit', compact('film', 'genres', 'acteurs'));
     }
