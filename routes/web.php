@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentaireController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProfilController;
@@ -21,6 +22,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('films/{film}/edit', [FilmController::class, 'edit'])->name('films.edit');
     Route::put('films/{film}', [FilmController::class, 'update'])->name('films.update');
     Route::delete('films/{film}', [FilmController::class, 'destroy'])->name('films.destroy');
+    Route::patch('/commentaires/{commentaire}/statut', [CommentaireController::class, 'updateStatut'])->name('commentaires.updateStatut');
+    Route::delete('/commentaires/{commentaire}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy');
 
     // Acteurs
     Route::post('/films/{film}/acteurs', [FilmController::class, 'attachActor'])
@@ -60,6 +63,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profil', [ProfilController::class, 'update'])->name('profil.update');
     Route::patch('/profil/password', [ProfilController::class, 'updatePassword'])->name('profil.password.update');
     Route::delete('/profil', [ProfilController::class, 'destroy'])->name('profil.destroy');
+    Route::post('/films/{film}/commentaires', [CommentaireController::class, 'store'])
+        ->name('commentaires.store');
 });
 
 Route::middleware(['guest'])->group(function () {

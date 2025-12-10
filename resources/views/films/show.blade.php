@@ -15,11 +15,12 @@
                 <p class="mb-4">
                     @foreach($film->genres as $genre)
                         <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded mr-1 mb-1">
-                            {{ $genre->nom }}
-                        </span>
+                        {{ $genre->nom }}
+                    </span>
                     @endforeach
                 </p>
             @endif
+
             {{-- Médias --}}
             <h2 class="text-xl font-bold mt-6 mb-3">Médias</h2>
             @if($film->medias->isEmpty())
@@ -33,16 +34,13 @@
                                 ? $media->url
                                 : \Illuminate\Support\Facades\Storage::disk('public')->url($media->url);
                         @endphp
-
                         <div class="border rounded-lg shadow-md p-3 bg-gray-50">
                             <img src="{{ $src }}"
                                  alt="{{ $media->description ?? 'Média du film' }}"
                                  class="w-full h-48 object-cover rounded-md mb-2">
-
                             @if($media->description)
                                 <p class="text-sm text-gray-700 mb-2">{{ $media->description }}</p>
                             @endif
-
                             @auth
                                 <form action="{{ route('medias.delete', $media->id) }}"
                                       method="POST"
@@ -60,24 +58,49 @@
                 </div>
             @endif
 
-
-            {{-- Acteurs avec rôle + note --}}
-            <h2 class="font-semibold mt-4 mb-2">Acteurs</h2>
+            {{-- Acteurs --}}
+            <h2 class="fon t-semibold mt-4 mb-2">Acteurs</h2>
             @if($film->acteurs->isEmpty())
                 <p class="text-sm text-gray-500">Aucun acteur renseigné.</p>
             @else
                 <ul class="space-y-1 mb-4">
                     @foreach($film->acteurs as $acteur)
                         <li>
-                            <span class="font-semibold">
-                                {{ $acteur->nom }}
-                            </span>
+                        <span class="font-semibold">
+                            {{ $acteur->nom }}
+                        </span>
                             – rôle : {{ $acteur->pivot->role }}
                             – note : {{ $acteur->pivot->note }}/10
                         </li>
                     @endforeach
                 </ul>
             @endif
+
+            {{-- Commentaires --}}
+            <h2 class="text-xl font-bold mt-6 mb-3">Commentaires</h2>
+
+            {{-- Liste des commentaires validés --}}
+            @forelse($film->commentaires()->where('status', 'valide')->get() as $commentaire)
+                <div class="border rounded p-3 mb-2 bg-gray-50">
+                    <p class="text-gray-800"><span class="font-semibold">{{ $commentaire->user->prenom }} {{ $commentaire->user->nom }} :</span> {{ $commentaire->content }}</p>
+                    <p class="text-sm text-gray-500">Note : {{ $commentaire->note }}/10</p>
+                </div>
+            @empty
+                <p class="text-sm text-gray-500 italic">Aucun commentaire validé pour ce film.</p>
+            @endforelse
+
+            {{-- Formulaire ajout commentaire --}}
+            @auth
+                <h3 class="font-semibold mt-4 mb-2">Ajouter un commentaire</h3>
+                <form action="{{ route('commentaires.store', $film->id) }}" method="POST">
+                    @csrf
+                    <textarea name="content" rows="4" class="border rounded w-full p-2 mb-2" placeholder="Votre commentaire" required>{{ old('content') }}</textarea>
+                    <input type="number" name="note" min="0" max="10" value="{{ old('note', 5) }}" class="border rounded p-2 mb-2" required>
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Envoyer</button>
+                </form>
+            @else
+                <p class="text-sm text-gray-500 mt-2">Connectez-vous pour ajouter un commentaire.</p>
+            @endauth
 
             <div class="flex justify-center mt-6">
                 <a href="{{ route('films.index') }}"
