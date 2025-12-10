@@ -52,7 +52,7 @@ class FilmController extends Controller
                 'titre'       => 'required|string|max:255',
                 'date_sortie' => 'nullable|date',
                 'synopsis'    => 'nullable|string',
-                'duree'       => 'required|integer|min:1',
+                'duree'       => 'required|integer|min:0',
                 'note'        => 'nullable|numeric|min:0|max:5',
                 'genres'      => ['array'],
                 'genres.*'    => ['exists:genres,id'],
