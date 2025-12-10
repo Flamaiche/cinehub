@@ -2,21 +2,31 @@
 
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\ProfilController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-//Route::get('/', function () {
-//    return view('layouts.app');
-//});
 
 Route::view('/', 'home')->name('home');
 
 Route::view('/contact', 'contact')->name('contact');
-
 Route::view('/presentation', 'presentation')->name('presentation');
 
-Route::resource('films', FilmController::class);
+
+Route::get('films', [FilmController::class, 'index'])->name('films.index');
+
+Route::middleware(['auth', 'role:user,admin'])->group(function () {
+    Route::get('films/{film}', [FilmController::class, 'show'])->name('films.show');
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('films/create', [FilmController::class, 'create'])->name('films.create');
+    Route::post('films', [FilmController::class, 'store'])->name('films.store');
+    Route::get('films/{film}/edit', [FilmController::class, 'edit'])->name('films.edit');
+    Route::put('films/{film}', [FilmController::class, 'update'])->name('films.update');
+    Route::delete('films/{film}', [FilmController::class, 'destroy'])->name('films.destroy');
+});
 
 Route::get('/test-auth', function () {
     if (Auth::check()) {
@@ -54,21 +64,16 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/medias/{id}', [MediaController::class, 'delete'])->name('medias.delete');
 });
 
+Route::middleware(['guest'])->group(function () {
+    Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+        ->name('password.request');
 
-Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
-    ->middleware(['guest'])
-    ->name('password.request');
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->name('password.email');
 
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-    ->middleware(['guest'])
-    ->name('password.email');
+    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+        ->name('password.reset');
 
-Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-    ->middleware(['guest'])
-    ->name('password.reset');
-
-Route::post('/reset-password', [NewPasswordController::class, 'store'])
-    ->middleware(['guest'])
-    ->name('password.store');
-
-
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])
+        ->name('password.store');
+});
