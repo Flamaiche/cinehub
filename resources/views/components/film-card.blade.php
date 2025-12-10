@@ -1,4 +1,3 @@
-
 <div>
     <a href="{{ route('films.show', $film->id) }}">
         <div class="border rounded-lg shadow p-4">
@@ -16,21 +15,26 @@
                 <p class="text-gray-700 text-sm mb-3">{{ Str::limit($film->synopsis, 120) }}</p>
                 <p class="font-bold text-yellow-600">⭐ {{ $film->note }}/5</p>
             </div>
-            <div class="mt-4 text-center flex justify-center gap-4">
-                <a href="{{ route('films.edit', $film->id) }}"
-                   class="bg-yellow-500 shadow-lg text-white px-4 py-2 rounded hover:bg-yellow-600 hover:shadow-xl transition">
-                    ✏️ Modifier
-                </a>
 
-                <form action="{{ route('films.destroy', $film->id) }}" method="POST"
-                      onsubmit="return confirm('⚠️ Voulez-vous vraiment supprimer ce film {{$film->titre}} ?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit"
-                            class="bg-red-600 shadow-lg text-white px-4 py-2 rounded hover:bg-red-700 hover:shadow-xl transition">
-                        🗑️ Supprimer
-                    </button>
-                </form>
+            <div class="mt-4 text-center flex justify-center gap-4">
+                @can('update', $film)
+                    <a href="{{ route('films.edit', $film->id) }}"
+                       class="bg-yellow-500 shadow-lg text-white px-4 py-2 rounded hover:bg-yellow-600 hover:shadow-xl transition">
+                        ✏️ Modifier
+                    </a>
+                @endcan
+
+                @can('delete', $film)
+                    <form action="{{ route('films.destroy', $film->id) }}" method="POST"
+                          onsubmit="return confirm('⚠️ Voulez-vous vraiment supprimer ce film {{$film->titre}} ?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                                class="bg-red-600 shadow-lg text-white px-4 py-2 rounded hover:bg-red-700 hover:shadow-xl transition">
+                            🗑️ Supprimer
+                        </button>
+                    </form>
+                @endcan
             </div>
         </div>
     </a>

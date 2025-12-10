@@ -7,11 +7,14 @@ use App\Models\Film;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 
 class FilmController extends Controller
 {
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Film::class);
+
         $search = $request->input('search');
         $searchCookie = request()->cookie('search');
 
@@ -33,6 +36,7 @@ class FilmController extends Controller
 
     public function create()
     {
+        Gate::authorize('create', Film::class);
         $genres = Genre::all();
 
         return view('films.create', compact('genres'));
@@ -40,6 +44,7 @@ class FilmController extends Controller
 
     public function store(Request $request)
     {
+        Gate::authorize('create', Film::class);
         $success = false;
 
         try {
@@ -47,7 +52,7 @@ class FilmController extends Controller
                 'titre'       => 'required|string|max:255',
                 'date_sortie' => 'nullable|date',
                 'synopsis'    => 'nullable|string',
-                'duree'       => 'required|integer|min:1',
+                'duree'       => 'required|integer|min:0',
                 'note'        => 'nullable|numeric|min:0|max:5',
                 'genres'      => ['array'],
                 'genres.*'    => ['exists:genres,id'],
@@ -70,6 +75,7 @@ class FilmController extends Controller
     public function edit($id)
     {
         $film   = Film::findOrFail($id);
+        Gate::authorize('update', $film);
         $genres = Genre::all();
         $acteurs = Acteur::all();
 
@@ -92,6 +98,8 @@ class FilmController extends Controller
             ]);
 
             $film = Film::findOrFail($id);
+            Gate::authorize('update', $film);
+
             $film->update($validatedData);
 
             $film->genres()->sync($request->input('genres', []));
@@ -112,6 +120,8 @@ class FilmController extends Controller
 
         try {
             $film = Film::findOrFail($id);
+            Gate::authorize('delete', $film);
+
             $titre = $film->titre;
             $film->delete();
 
@@ -128,12 +138,15 @@ class FilmController extends Controller
     public function show($id)
     {
         $film = Film::with(['genres', 'medias', 'acteurs'])->findOrFail($id);
+        Gate::authorize('view', $film);
 
         return view('films.show', compact('film'));
     }
 
     public function attachActor(Request $request, Film $film)
     {
+        Gate::authorize('update', $film);
+
         $data = $request->validate([
             'acteur_id' => ['required', 'exists:acteurs,id'],
             'role'      => ['required', 'string', 'max:255'],
