@@ -18,7 +18,7 @@
                 <div class="flex gap-4 items-center">
                     <a href="{{ route('profil.show') }}"
                        class="text-sm hover:underline">
-                        {{ Auth::user()->prenom }} {{ Auth::user()->nom }}
+                        {{ Auth::user()->prenom }} {{ Auth::user()->nom }} <span class="uppercase"> {{ Auth::user()->role }} </span>
                     </a>
 
                     <form method="POST" action="/logout" class="inline">
