@@ -1,6 +1,5 @@
 ```aiignore
-php artisan migrate:fresh
-php artisan migrate --seed
+php .\artisan migrate:fresh --seed
 php artisan serve
 
 npm run dev
