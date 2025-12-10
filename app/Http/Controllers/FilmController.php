@@ -69,9 +69,10 @@ class FilmController extends Controller
     public function edit($id)
     {
         $film   = Film::findOrFail($id);
-        $genres = Genre::all();
+        $genres = $film->genres;
+        $acteurs = $film->acteurs;
 
-        return view('films.edit', compact('film', 'genres'));
+        return view('films.edit', compact('film', 'genres', 'acteurs'));
     }
 
     public function update(Request $request, $id)
@@ -128,5 +129,43 @@ class FilmController extends Controller
         $film = Film::with(['genres', 'medias', 'acteurs'])->findOrFail($id);
 
         return view('films.show', compact('film'));
+    }
+
+    public function attachActor(Request $request, Film $film)
+    {
+        $data = $request->validate([
+            'acteur_id' => ['required', 'exists:acteurs,id'],
+            'role'      => ['required', 'string', 'max:255'],
+            'note'      => ['nullable', 'integer', 'min:0', 'max:10'],
+        ]);
+
+        $film->acteurs()->attach($data['acteur_id'], [
+            'role' => $data['role'],
+            'note' => $data['note'],
+        ]);
+
+        return back()->with('success', 'Acteur ajouté au film.');
+    }
+
+    public function updateActor(Request $request, Film $film, Acteur $acteur)
+    {
+        $data = $request->validate([
+            'role' => ['required', 'string', 'max:255'],
+            'note' => ['nullable', 'integer', 'min:0', 'max:10'],
+        ]);
+
+        $film->acteurs()->updateExistingPivot($acteur->id, [
+            'role' => $data['role'],
+            'note' => $data['note'],
+        ]);
+
+        return back()->with('success', 'Rôle et note mis à jour pour cet acteur.');
+    }
+
+    public function detachActor(Film $film, Acteur $acteur)
+    {
+        $film->acteurs()->detach($acteur->id);
+
+        return back()->with('success', 'Acteur retiré du film.');
     }
 }
