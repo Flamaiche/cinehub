@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('film_id')->constrained()->cascadeOnDelete();
             $table->text('content');
             $table->float('note');
-            $table->string('status'); // ⚠️ pas "statut"
+            $table->string('statut');
             $table->timestamps();
         });
 

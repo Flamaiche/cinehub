@@ -10,10 +10,13 @@ class ProfilController extends Controller
 {
     public function show()
     {
-        return view('profil.show', [
-            'user' => Auth::user(),
-        ]);
+        $user = Auth::user();
+        $commentaires = $user->commentaires()->get();
+
+        return view('profil.show', compact('user', 'commentaires'));
     }
+
+
 
     public function edit()
     {

@@ -11,23 +11,35 @@ class CommentaireController extends Controller
 {
     public function store(Request $request, Film $film)
     {
-        // Validation
         $request->validate([
-            'content' => 'required|string|max:1000', // <-- correspond au champ de la table
-            'note' => 'required|integer|min:0|max:10',
+            'content' => 'required|string|max:1000',
+            'note'    => 'required|integer|min:0|max:10',
         ]);
 
-        // Création du commentaire
         Commentaire::create([
             'user_id' => Auth::id(),
             'film_id' => $film->id,
             'content' => $request->content,
-            'note' => $request->note,
-            'status' => 'en attente',
+            'note'    => $request->note,
+            'statut'  => 'en_attente', // obligatoire pour le workflow admin
         ]);
 
         return redirect()->back()->with('success', 'Commentaire ajouté !');
     }
 
-    // Méthodes pour updateStatut, destroy, etc.
+
+    public function updateStatut(Commentaire $commentaire)
+    {
+        if (!auth()->user()->isAdmin()) {
+            abort(403);
+        }
+
+        $commentaire->statut = 'valide';
+        $commentaire->save();
+
+        return back()->with('success', 'Commentaire validé avec succès.');
+    }
+
+
+
 }

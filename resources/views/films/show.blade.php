@@ -15,8 +15,8 @@
                 <p class="mb-4">
                     @foreach($film->genres as $genre)
                         <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded mr-1 mb-1">
-                        {{ $genre->nom }}
-                    </span>
+                            {{ $genre->nom }}
+                        </span>
                     @endforeach
                 </p>
             @endif
@@ -38,9 +38,11 @@
                             <img src="{{ $src }}"
                                  alt="{{ $media->description ?? 'Média du film' }}"
                                  class="w-full h-48 object-cover rounded-md mb-2">
+
                             @if($media->description)
                                 <p class="text-sm text-gray-700 mb-2">{{ $media->description }}</p>
                             @endif
+
                             @auth
                                 <form action="{{ route('medias.delete', $media->id) }}"
                                       method="POST"
@@ -59,16 +61,14 @@
             @endif
 
             {{-- Acteurs --}}
-            <h2 class="fon t-semibold mt-4 mb-2">Acteurs</h2>
+            <h2 class="font-semibold mt-4 mb-2">Acteurs</h2>
             @if($film->acteurs->isEmpty())
                 <p class="text-sm text-gray-500">Aucun acteur renseigné.</p>
             @else
                 <ul class="space-y-1 mb-4">
                     @foreach($film->acteurs as $acteur)
                         <li>
-                        <span class="font-semibold">
-                            {{ $acteur->nom }}
-                        </span>
+                            <span class="font-semibold">{{ $acteur->nom }}</span>
                             – rôle : {{ $acteur->pivot->role }}
                             – note : {{ $acteur->pivot->note }}/10
                         </li>
@@ -79,14 +79,50 @@
             {{-- Commentaires --}}
             <h2 class="text-xl font-bold mt-6 mb-3">Commentaires</h2>
 
-            {{-- Liste des commentaires validés --}}
-            @forelse($film->commentaires()->where('status', 'valide')->get() as $commentaire)
+            @php
+                // Si admin, on récupère tous les commentaires, sinon seulement les validés
+                $commentaires = auth()->check() && auth()->user()->isAdmin()
+                    ? $film->commentaires
+                    : $film->commentaires->where('statut', 'valide');
+            @endphp
+
+            @forelse($commentaires as $commentaire)
                 <div class="border rounded p-3 mb-2 bg-gray-50">
-                    <p class="text-gray-800"><span class="font-semibold">{{ $commentaire->user->prenom }} {{ $commentaire->user->nom }} :</span> {{ $commentaire->content }}</p>
+                    <p class="text-gray-800">
+                        <span class="font-semibold">{{ $commentaire->user->prenom }} {{ $commentaire->user->nom }} :</span>
+                        {{ $commentaire->content }}
+                    </p>
                     <p class="text-sm text-gray-500">Note : {{ $commentaire->note }}/10</p>
+
+                    @if(auth()->check() && auth()->user()->isAdmin())
+                        <div class="mt-2 flex gap-2 flex-wrap">
+                            @if($commentaire->statut === 'en_attente')
+                                <form action="{{ route('commentaires.updateStatut', $commentaire->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit"
+                                            class="bg-green-600 text-white px-2 py-1 rounded text-xs hover:bg-green-700">
+                                        Valider
+                                    </button>
+                                </form>
+                            @endif
+
+                            @if($commentaire->statut !== 'supprime')
+                                <form action="{{ route('commentaires.destroy', $commentaire->id) }}" method="POST"
+                                      onsubmit="return confirm('Supprimer ce commentaire ?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="bg-red-600 text-white px-2 py-1 rounded text-xs hover:bg-red-700">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    @endif
                 </div>
             @empty
-                <p class="text-sm text-gray-500 italic">Aucun commentaire validé pour ce film.</p>
+                <p class="text-sm text-gray-500 italic">Aucun commentaire pour ce film.</p>
             @endforelse
 
             {{-- Formulaire ajout commentaire --}}
@@ -94,9 +130,17 @@
                 <h3 class="font-semibold mt-4 mb-2">Ajouter un commentaire</h3>
                 <form action="{{ route('commentaires.store', $film->id) }}" method="POST">
                     @csrf
-                    <textarea name="content" rows="4" class="border rounded w-full p-2 mb-2" placeholder="Votre commentaire" required>{{ old('content') }}</textarea>
-                    <input type="number" name="note" min="0" max="10" value="{{ old('note', 5) }}" class="border rounded p-2 mb-2" required>
-                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Envoyer</button>
+                    <textarea name="content" rows="4"
+                              class="border rounded w-full p-2 mb-2"
+                              placeholder="Votre commentaire" required>{{ old('content') }}</textarea>
+
+                    <input type="number" name="note" min="0" max="10" value="{{ old('note', 5) }}"
+                           class="border rounded p-2 mb-2" required>
+
+                    <button type="submit"
+                            class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                        Envoyer
+                    </button>
                 </form>
             @else
                 <p class="text-sm text-gray-500 mt-2">Connectez-vous pour ajouter un commentaire.</p>

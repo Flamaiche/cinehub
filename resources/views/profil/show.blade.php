@@ -38,7 +38,7 @@
             <ul class="space-y-4">
                 @foreach($user->commentaires as $commentaire)
                     <li class="bg-gray-50 border border-gray-200 rounded p-4 shadow-sm">
-                        <p class="text-gray-800">{{ $commentaire->contenu }}</p>
+                        <p class="text-gray-800">{{ $commentaire->content }}</p>
                         @if($commentaire->note)
                             <p class="text-sm text-gray-600">Note : {{ $commentaire->note }}/10</p>
                         @endif
@@ -55,7 +55,7 @@
                         </p>
 
                         <div class="mt-2 flex gap-2 flex-wrap">
-                            {{-- Options utilisateur --}}
+                            {{-- Options pour l'utilisateur --}}
                             @if(auth()->id() === $user->id && $commentaire->statut !== 'supprime')
                                 <a href="{{ route('commentaires.edit', $commentaire->id) }}"
                                    class="text-blue-600 hover:underline text-sm">Modifier</a>
@@ -68,8 +68,8 @@
                                 </form>
                             @endif
 
-                            {{-- Options admin --}}
-                            @if(auth()->check() && auth()->user()->isAdmin())
+                            {{-- Options pour l'admin --}}
+                            @if(auth()->check() && auth()->user()->role === 'admin')
                                 @if($commentaire->statut === 'en_attente')
                                     <form action="{{ route('commentaires.updateStatut', $commentaire->id) }}" method="POST">
                                         @csrf
