@@ -43,7 +43,8 @@
                                 <p class="text-sm text-gray-700 mb-2">{{ $media->description }}</p>
                             @endif
 
-                            @auth
+                            {{-- Suppression des médias uniquement si autorisé à modifier le film --}}
+                            @can('update', $film)
                                 <form action="{{ route('medias.delete', $media->id) }}"
                                       method="POST"
                                       onsubmit="return confirm('Supprimer ce média ?');">
@@ -54,7 +55,7 @@
                                         🗑️ Supprimer
                                     </button>
                                 </form>
-                            @endauth
+                            @endcan
                         </div>
                     @endforeach
                 </div>
