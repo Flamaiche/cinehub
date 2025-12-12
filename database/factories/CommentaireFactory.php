@@ -3,6 +3,9 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
+use App\Models\Film;
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Commentaire>
@@ -17,13 +20,13 @@ class CommentaireFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => $this->faker->numberBetween(1, 10),
-            'film_id' => $this->faker->numberBetween(1, 10),
-            'content'  => $this->faker->text,
-            'note' => $this->faker->randomFloat(1, 0, 5),
-            'status'   => $this->faker->randomElement(['valid', 'invalid', 'in progress']),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'user_id' => User::factory(),
+            'film_id' => Film::factory(),
+            'content' => $this->faker->paragraph(),
+            'note' => $this->faker->numberBetween(0, 10),
+            'statut' => $this->faker->randomElement(['valide', 'en_attente', 'supprime']),
+
         ];
+
     }
 }

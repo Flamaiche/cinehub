@@ -137,11 +137,12 @@ class FilmController extends Controller
 
     public function show($id)
     {
-        $film = Film::with(['genres', 'medias', 'acteurs'])->findOrFail($id);
-        Gate::authorize('view', $film);
+        $film = Film::with(['genres', 'medias', 'acteurs', 'commentaires.user'])->findOrFail($id);
 
         return view('films.show', compact('film'));
     }
+
+
 
     public function attachActor(Request $request, Film $film)
     {

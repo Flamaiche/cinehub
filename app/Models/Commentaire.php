@@ -15,7 +15,7 @@ class Commentaire extends Model
         'film_id',
         'content',
         'note',
-        'status',
+        'statut',
         'created_at',
         'updated_at',
     ];
